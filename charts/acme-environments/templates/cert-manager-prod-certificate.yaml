@@ -1,22 +1,21 @@
-{{- range .Values.jxRequirements.environments }}
-{{- if .ingress.tls.production }}
----
+{{- if .Values.jxRequirements.ingress.domain }}
+{{- if .Values.jxRequirements.ingress.tls.production }}
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: "tls-{{ .ingress.domain | replace "." "-" }}-p"
+  name: "tls-{{ .Values.jxRequirements.ingress.domain | replace "." "-" }}-p"
   labels:
     jenkins.io/letsencrypt-service: production
 spec:
-  secretName: "tls-{{ .ingress.domain | replace "." "-" }}-p"
+  secretName: "tls-{{ .Values.jxRequirements.ingress.domain | replace "." "-" }}-p"
   issuerRef:
     name: letsencrypt-prod
-{{- if $.Values.issuer.cluster }}
+{{- if .Values.issuer.cluster }}
     kind: ClusterIssuer
 {{- end }}
-  commonName: "*.{{ .ingress.domain }}"
+  commonName: "*.{{ .Values.jxRequirements.ingress.domain }}"
   dnsNames:
-  - "*.{{ .ingress.domain }}"
-  - "{{ .ingress.domain }}"
+  - "*.{{ .Values.jxRequirements.ingress.domain }}"
+  - "{{ .Values.jxRequirements.ingress.domain }}"
 {{- end }}
 {{- end }}
